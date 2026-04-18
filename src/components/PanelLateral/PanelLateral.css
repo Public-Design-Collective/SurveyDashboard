@@ -1,0 +1,79 @@
+.panel-lateral {
+  height: 100vh;
+  overflow-y: auto;
+  background: #ffffff;
+  border-left: 1px solid #e0e0e0;
+  padding: 1.25rem;
+}
+
+.panel-lateral-encabezado {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #2563eb;
+}
+
+.panel-lateral-titulo {
+  font-size: 1.3rem;
+  color: #1e293b;
+  margin-bottom: 0.25rem;
+}
+
+.panel-lateral-conteo {
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+.panel-lateral-boton-volver {
+  background: none;
+  border: none;
+  font-size: 0.85rem;
+  cursor: pointer;
+  color: #2563eb;
+  padding: 0;
+  margin-bottom: 0.75rem;
+  transition: color 0.15s;
+}
+
+.panel-lateral-boton-volver:hover {
+  color: #1d4ed8;
+}
+
+.panel-lateral-metricas {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.metrica-tarjeta {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.metrica-valor {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2563eb;
+}
+
+.metrica-etiqueta {
+  font-size: 0.75rem;
+  color: #64748b;
+  margin-top: 0.25rem;
+}
+
+.panel-lateral-lista {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}

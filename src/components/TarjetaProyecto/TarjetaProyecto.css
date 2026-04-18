@@ -1,0 +1,25 @@
+.tarjeta-proyecto {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 0.75rem;
+}
+
+.tarjeta-proyecto-id {
+  font-weight: 600;
+  color: #2563eb;
+  margin-bottom: 0.4rem;
+  font-size: 0.9rem;
+}
+
+.tarjeta-proyecto-detalle {
+  font-size: 0.8rem;
+  color: #475569;
+  margin-bottom: 0.2rem;
+  line-height: 1.4;
+}
+
+.tarjeta-proyecto-etiqueta {
+  font-weight: 600;
+  color: #334155;
+}
