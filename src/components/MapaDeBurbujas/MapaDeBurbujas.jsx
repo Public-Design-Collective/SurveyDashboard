@@ -1,4 +1,5 @@
-import { MapContainer, TileLayer, CircleMarker, Tooltip, useMapEvents } from 'react-leaflet';
+import L from 'leaflet';
+import { MapContainer, TileLayer, CircleMarker, Marker, useMapEvents } from 'react-leaflet';
 import { COORDENADAS_PAISES } from '../../utils/coordenadasPaises';
 import {
   CENTRO_MAPA,
@@ -50,6 +51,13 @@ function MapaDeBurbujas({ conteosPorPais, conteoMaximoReferencia, paisSelecciona
         const estaSeleccionado = nombrePais === paisSeleccionado;
         const radio = calcularRadio(conteo, conteoMaximoReferencia);
 
+        const icono = L.divIcon({
+          className: 'etiqueta-burbuja',
+          html: `${conteo}`,
+          iconSize: [radio * 2, radio * 2],
+          iconAnchor: [radio, radio],
+        });
+
         return (
           <CircleMarker
             key={nombrePais}
@@ -67,10 +75,11 @@ function MapaDeBurbujas({ conteosPorPais, conteoMaximoReferencia, paisSelecciona
               click: () => onSeleccionarPais(nombrePais),
             }}
           >
-            <Tooltip direction="top" offset={[0, -radio]}>
-              <strong>{nombrePais}</strong>: {conteo}{' '}
-              {conteo === 1 ? 'proyecto' : 'proyectos'}
-            </Tooltip>
+            <Marker
+              position={coordenadas}
+              icon={icono}
+              interactive={false}
+            />
           </CircleMarker>
         );
       })}
