@@ -9,8 +9,8 @@ export const ZOOM_MAXIMO = 6;
 export const RADIO_MAXIMO_BURBUJA = 40;
 export const RADIO_MINIMO_BURBUJA = 6;
 
-export const COLOR_BURBUJA = '#2563eb';
-export const COLOR_BURBUJA_SELECCIONADA = '#dc2626';
+export const COLOR_PAIS_UNICO = '#ABC174';
+export const COLOR_MULTIPAIS = '#C88FF2';
 
 export const PAISES_VALIDOS = new Set([
   'Argentina',

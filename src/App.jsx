@@ -1,10 +1,11 @@
 import { useState, useMemo } from "react";
 import { useDatosSurvey } from "./hooks/useDatosSurvey";
 import {
-  contarProyectosPorPais,
+  contarProyectosPorPaisDesglosado,
   obtenerProyectosPorPais,
   calcularMetricasGlobales,
   calcularMetricasPais,
+  calcularDatosGraficosDesglosados,
 } from "./utils/procesarDatos";
 import MapaDeBurbujas from "./components/MapaDeBurbujas/MapaDeBurbujas";
 import PanelLateral from "./components/PanelLateral/PanelLateral";
@@ -14,10 +15,20 @@ function App() {
   const { datos, cargando, error } = useDatosSurvey();
   const [incluirMultipais, setIncluirMultipais] = useState(true);
   const [paisSeleccionado, setPaisSeleccionado] = useState(null);
-  const conteosPorPais = useMemo(
-    () => contarProyectosPorPais(datos, incluirMultipais),
-    [datos, incluirMultipais],
+
+  const conteosDesglosados = useMemo(
+    () => contarProyectosPorPaisDesglosado(datos),
+    [datos],
   );
+
+  const conteoMaximoReferencia = useMemo(() => {
+    const { paisUnico, multipais } = conteosDesglosados;
+    return Math.max(
+      ...Object.values(paisUnico),
+      ...Object.values(multipais),
+      0,
+    );
+  }, [conteosDesglosados]);
 
   const proyectosDelPais = useMemo(
     () =>
@@ -26,11 +37,6 @@ function App() {
         : [],
     [datos, paisSeleccionado, incluirMultipais],
   );
-
-  const conteoMaximoReferencia = useMemo(() => {
-    const conteosCompletos = contarProyectosPorPais(datos, true);
-    return Math.max(...Object.values(conteosCompletos), 0);
-  }, [datos]);
 
   const metricasGlobales = useMemo(
     () => calcularMetricasGlobales(datos),
@@ -42,6 +48,11 @@ function App() {
       paisSeleccionado
         ? calcularMetricasPais(datos, paisSeleccionado)
         : null,
+    [datos, paisSeleccionado],
+  );
+
+  const datosGraficos = useMemo(
+    () => calcularDatosGraficosDesglosados(datos, paisSeleccionado),
     [datos, paisSeleccionado],
   );
 
@@ -73,8 +84,10 @@ function App() {
           onCambiar={setIncluirMultipais}
         />
         <MapaDeBurbujas
-          conteosPorPais={conteosPorPais}
+          conteosPaisUnico={conteosDesglosados.paisUnico}
+          conteosMultipais={conteosDesglosados.multipais}
           conteoMaximoReferencia={conteoMaximoReferencia}
+          incluirMultipais={incluirMultipais}
           paisSeleccionado={paisSeleccionado}
           onSeleccionarPais={setPaisSeleccionado}
           onDeseleccionarPais={manejarDeseleccionPais}
@@ -85,6 +98,8 @@ function App() {
         proyectos={proyectosDelPais}
         metricasGlobales={metricasGlobales}
         metricasPais={metricasPais}
+        datosGraficos={datosGraficos}
+        incluirMultipais={incluirMultipais}
         onVolver={manejarDeseleccionPais}
       />
     </div>

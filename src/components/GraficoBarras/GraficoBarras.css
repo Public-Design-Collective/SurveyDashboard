@@ -1,0 +1,21 @@
+.grafico-tooltip {
+  position: fixed;
+  display: none;
+  background: #1e293b;
+  color: #fff;
+  padding: 0.4rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  pointer-events: none;
+  z-index: 1000;
+  white-space: nowrap;
+}
+
+.grafico-barras {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.grafico-barras svg {
+  display: block;
+}

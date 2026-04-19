@@ -71,6 +71,14 @@
   margin-top: 0.25rem;
 }
 
+.panel-lateral-seccion-titulo {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #334155;
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
 .panel-lateral-lista {
   list-style: none;
   display: flex;

@@ -1,0 +1,73 @@
+.grafico-tooltip {
+  position: fixed;
+  display: none;
+  background: #1e293b;
+  color: #fff;
+  padding: 0.4rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  pointer-events: none;
+  z-index: 1000;
+  white-space: nowrap;
+}
+
+.grafico-donut {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.grafico-donut-graficos {
+  display: flex;
+  justify-content: center;
+}
+
+.grafico-donut-dual {
+  gap: 1rem;
+}
+
+.grafico-donut-columna {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.grafico-donut-subtitulo {
+  font-size: 0.7rem;
+  color: #64748b;
+  margin-bottom: 0.25rem;
+}
+
+.grafico-donut-leyenda {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  width: 100%;
+  margin-top: 0.75rem;
+}
+
+.grafico-donut-leyenda-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+}
+
+.grafico-donut-leyenda-color {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.grafico-donut-leyenda-texto {
+  color: #475569;
+  flex: 1;
+}
+
+.grafico-donut-leyenda-valor {
+  color: #1e293b;
+  font-weight: 600;
+  min-width: 2rem;
+  text-align: right;
+}

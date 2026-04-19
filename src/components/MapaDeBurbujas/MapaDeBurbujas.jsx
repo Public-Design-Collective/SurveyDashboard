@@ -1,5 +1,4 @@
-import L from 'leaflet';
-import { MapContainer, TileLayer, CircleMarker, Marker, useMapEvents } from 'react-leaflet';
+import { MapContainer, TileLayer, CircleMarker, Tooltip, useMapEvents } from 'react-leaflet';
 import { COORDENADAS_PAISES } from '../../utils/coordenadasPaises';
 import {
   CENTRO_MAPA,
@@ -8,10 +7,12 @@ import {
   ZOOM_MAXIMO,
   RADIO_MAXIMO_BURBUJA,
   RADIO_MINIMO_BURBUJA,
-  COLOR_BURBUJA,
-  COLOR_BURBUJA_SELECCIONADA,
+  COLOR_PAIS_UNICO,
+  COLOR_MULTIPAIS,
 } from '../../utils/constantes';
 import './MapaDeBurbujas.css';
+
+const OFFSET_MULTIPAIS = [0, 1.2];
 
 function calcularRadio(conteo, conteoMaximo) {
   if (conteoMaximo === 0) return RADIO_MINIMO_BURBUJA;
@@ -28,9 +29,40 @@ function ClickFueraDeBurbujas({ onDeseleccionar }) {
   return null;
 }
 
-function MapaDeBurbujas({ conteosPorPais, conteoMaximoReferencia, paisSeleccionado, onSeleccionarPais, onDeseleccionarPais }) {
-  const paises = Object.entries(conteosPorPais);
+function Burbuja({ nombrePais, coordenadas, conteo, radio, color, tipo, estaSeleccionado, onSeleccionarPais }) {
+  return (
+    <CircleMarker
+      center={coordenadas}
+      radius={radio}
+      bubblingMouseEvents={false}
+      pathOptions={{
+        fillColor: color,
+        fillOpacity: 0.7,
+        color: estaSeleccionado ? '#1e293b' : color,
+        weight: estaSeleccionado ? 2.5 : 1,
+        opacity: 0.9,
+      }}
+      eventHandlers={{
+        click: () => onSeleccionarPais(nombrePais),
+      }}
+    >
+      <Tooltip direction="top" offset={[0, -radio]}>
+        <strong>{nombrePais}</strong>: {conteo}{' '}
+        {conteo === 1 ? 'proyecto' : 'proyectos'} ({tipo})
+      </Tooltip>
+    </CircleMarker>
+  );
+}
 
+function MapaDeBurbujas({
+  conteosPaisUnico,
+  conteosMultipais,
+  conteoMaximoReferencia,
+  incluirMultipais,
+  paisSeleccionado,
+  onSeleccionarPais,
+  onDeseleccionarPais,
+}) {
   return (
     <MapContainer
       center={CENTRO_MAPA}
@@ -44,45 +76,50 @@ function MapaDeBurbujas({ conteosPorPais, conteoMaximoReferencia, paisSelecciona
         url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
       />
       <ClickFueraDeBurbujas onDeseleccionar={onDeseleccionarPais} />
-      {paises.map(([nombrePais, conteo]) => {
+
+      {Object.entries(conteosPaisUnico).map(([nombrePais, conteo]) => {
         const coordenadas = COORDENADAS_PAISES[nombrePais];
         if (!coordenadas) return null;
 
-        const estaSeleccionado = nombrePais === paisSeleccionado;
-        const radio = calcularRadio(conteo, conteoMaximoReferencia);
-
-        const icono = L.divIcon({
-          className: 'etiqueta-burbuja',
-          html: `${conteo}`,
-          iconSize: [radio * 2, radio * 2],
-          iconAnchor: [radio, radio],
-        });
-
         return (
-          <CircleMarker
-            key={nombrePais}
-            center={coordenadas}
-            radius={radio}
-            bubblingMouseEvents={false}
-            pathOptions={{
-              fillColor: estaSeleccionado ? COLOR_BURBUJA_SELECCIONADA : COLOR_BURBUJA,
-              fillOpacity: 0.6,
-              color: estaSeleccionado ? COLOR_BURBUJA_SELECCIONADA : COLOR_BURBUJA,
-              weight: 1,
-              opacity: 0.8,
-            }}
-            eventHandlers={{
-              click: () => onSeleccionarPais(nombrePais),
-            }}
-          >
-            <Marker
-              position={coordenadas}
-              icon={icono}
-              interactive={false}
-            />
-          </CircleMarker>
+          <Burbuja
+            key={`pu-${nombrePais}`}
+            nombrePais={nombrePais}
+            coordenadas={coordenadas}
+            conteo={conteo}
+            radio={calcularRadio(conteo, conteoMaximoReferencia)}
+            color={COLOR_PAIS_UNICO}
+            tipo="País-único"
+            estaSeleccionado={nombrePais === paisSeleccionado}
+            onSeleccionarPais={onSeleccionarPais}
+          />
         );
       })}
+
+      {incluirMultipais &&
+        Object.entries(conteosMultipais).map(([nombrePais, conteo]) => {
+          const coordenadas = COORDENADAS_PAISES[nombrePais];
+          if (!coordenadas) return null;
+
+          const coordenadasOffset = [
+            coordenadas[0] + OFFSET_MULTIPAIS[0],
+            coordenadas[1] + OFFSET_MULTIPAIS[1],
+          ];
+
+          return (
+            <Burbuja
+              key={`mp-${nombrePais}`}
+              nombrePais={nombrePais}
+              coordenadas={coordenadasOffset}
+              conteo={conteo}
+              radio={calcularRadio(conteo, conteoMaximoReferencia)}
+              color={COLOR_MULTIPAIS}
+              tipo="Multi-país"
+              estaSeleccionado={nombrePais === paisSeleccionado}
+              onSeleccionarPais={onSeleccionarPais}
+            />
+          );
+        })}
     </MapContainer>
   );
 }

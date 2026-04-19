@@ -71,6 +71,57 @@ export function calcularMetricasPais(filas, nombrePais) {
   return { proyectosPaisUnico, proyectosMultipais };
 }
 
+export function contarProyectosPorPaisDesglosado(filas) {
+  const paisUnico = {};
+  const multipais = {};
+
+  for (const fila of filas) {
+    const paises = extraerPaises(fila.paisImplementacion);
+    const destino = fila.clasificacion === 'País-único' ? paisUnico : multipais;
+    for (const pais of paises) {
+      destino[pais] = (destino[pais] || 0) + 1;
+    }
+  }
+
+  return { paisUnico, multipais };
+}
+
+export function calcularDatosGraficosDesglosados(filas, nombrePais) {
+  let filasActivas = filas;
+
+  if (nombrePais) {
+    filasActivas = filas.filter((fila) => {
+      const paises = extraerPaises(fila.paisImplementacion);
+      return paises.includes(nombrePais);
+    });
+  }
+
+  const conteoRolPaisUnico = {};
+  const conteoRolMultipais = {};
+  const conteoTipoInstitucionPaisUnico = {};
+  const conteoTipoInstitucionMultipais = {};
+
+  for (const fila of filasActivas) {
+    const esPaisUnico = fila.clasificacion === 'País-único';
+
+    if (fila.rol) {
+      const destino = esPaisUnico ? conteoRolPaisUnico : conteoRolMultipais;
+      destino[fila.rol] = (destino[fila.rol] || 0) + 1;
+    }
+    if (fila.tipoInstitucion) {
+      const destino = esPaisUnico ? conteoTipoInstitucionPaisUnico : conteoTipoInstitucionMultipais;
+      destino[fila.tipoInstitucion] = (destino[fila.tipoInstitucion] || 0) + 1;
+    }
+  }
+
+  return {
+    conteoRolPaisUnico,
+    conteoRolMultipais,
+    conteoTipoInstitucionPaisUnico,
+    conteoTipoInstitucionMultipais,
+  };
+}
+
 export function obtenerProyectosPorPais(filas, nombrePais, incluirMultipais) {
   const filasActivas = filtrarPorClasificacion(filas, incluirMultipais);
 
