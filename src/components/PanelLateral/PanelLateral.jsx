@@ -12,9 +12,13 @@ function PanelLateral({
   metricasGlobales,
   metricasPais,
   datosGraficos,
+  incluirPaisUnico,
   incluirMultipais,
   onVolver,
 }) {
+  const datosPU = incluirPaisUnico;
+  const datosMP = incluirMultipais;
+
   return (
     <aside className="panel-lateral">
       {paisSeleccionado && (
@@ -39,46 +43,34 @@ function PanelLateral({
       {paisSeleccionado ? (
         <>
           <div className="panel-lateral-metricas">
-            <div className="metrica-tarjeta">
-              <span
-                className="metrica-valor"
-                style={{ color: COLOR_PAIS_UNICO }}
-              >
-                {metricasPais.proyectosPaisUnico}
-              </span>
-              <span className="metrica-etiqueta">Proyectos país-único</span>
-            </div>
-            <div className="metrica-tarjeta">
-              <span
-                className="metrica-valor"
-                style={{ color: COLOR_MULTIPAIS }}
-              >
-                {metricasPais.proyectosMultipais}
-              </span>
-              <span className="metrica-etiqueta">Proyectos multi-país</span>
-            </div>
+            {datosPU && (
+              <div className="metrica-tarjeta">
+                <span className="metrica-valor" style={{ color: COLOR_PAIS_UNICO }}>
+                  {metricasPais.proyectosPaisUnico}
+                </span>
+                <span className="metrica-etiqueta">Proyectos país-único</span>
+              </div>
+            )}
+            {datosMP && (
+              <div className="metrica-tarjeta">
+                <span className="metrica-valor" style={{ color: COLOR_MULTIPAIS }}>
+                  {metricasPais.proyectosMultipais}
+                </span>
+                <span className="metrica-etiqueta">Proyectos multi-país</span>
+              </div>
+            )}
           </div>
 
-          <h3 className="panel-lateral-seccion-titulo">
-            Distribución por rol
-          </h3>
+          <h3 className="panel-lateral-seccion-titulo">Distribución por rol</h3>
           <GraficoDonut
-            datosPaisUnico={datosGraficos.conteoRolPaisUnico}
-            datosMultipais={
-              incluirMultipais ? datosGraficos.conteoRolMultipais : null
-            }
+            datosPaisUnico={datosPU ? datosGraficos.conteoRolPaisUnico : null}
+            datosMultipais={datosMP ? datosGraficos.conteoRolMultipais : null}
           />
 
-          <h3 className="panel-lateral-seccion-titulo">
-            Proyectos por tipo de institución
-          </h3>
+          <h3 className="panel-lateral-seccion-titulo">Proyectos por tipo de institución</h3>
           <GraficoBarras
-            datosPaisUnico={datosGraficos.conteoTipoInstitucionPaisUnico}
-            datosMultipais={
-              incluirMultipais
-                ? datosGraficos.conteoTipoInstitucionMultipais
-                : null
-            }
+            datosPaisUnico={datosPU ? datosGraficos.conteoTipoInstitucionPaisUnico : null}
+            datosMultipais={datosMP ? datosGraficos.conteoTipoInstitucionMultipais : null}
           />
 
           <h3 className="panel-lateral-seccion-titulo">Proyectos</h3>
@@ -93,68 +85,50 @@ function PanelLateral({
       ) : (
         <>
           <div className="panel-lateral-metricas">
-            <div className="metrica-tarjeta">
-              <span
-                className="metrica-valor"
-                style={{ color: COLOR_PAIS_UNICO }}
-              >
-                {metricasGlobales.proyectosPaisUnico}
-              </span>
-              <span className="metrica-etiqueta">Proyectos país-único</span>
-            </div>
-            <div className="metrica-tarjeta">
-              <span
-                className="metrica-valor"
-                style={{ color: COLOR_MULTIPAIS }}
-              >
-                {metricasGlobales.proyectosMultipais}
-              </span>
-              <span className="metrica-etiqueta">Proyectos multi-país</span>
-            </div>
-            <div className="metrica-tarjeta">
-              <span
-                className="metrica-valor"
-                style={{ color: COLOR_PAIS_UNICO }}
-              >
-                {metricasGlobales.paisesConPaisUnico}
-              </span>
-              <span className="metrica-etiqueta">
-                Países con proyectos país-único
-              </span>
-            </div>
-            <div className="metrica-tarjeta">
-              <span
-                className="metrica-valor"
-                style={{ color: COLOR_MULTIPAIS }}
-              >
-                {metricasGlobales.paisesConMultipais}
-              </span>
-              <span className="metrica-etiqueta">
-                Países con proyectos multi-país
-              </span>
-            </div>
+            {datosPU && (
+              <div className="metrica-tarjeta">
+                <span className="metrica-valor" style={{ color: COLOR_PAIS_UNICO }}>
+                  {metricasGlobales.proyectosPaisUnico}
+                </span>
+                <span className="metrica-etiqueta">Proyectos país-único</span>
+              </div>
+            )}
+            {datosMP && (
+              <div className="metrica-tarjeta">
+                <span className="metrica-valor" style={{ color: COLOR_MULTIPAIS }}>
+                  {metricasGlobales.proyectosMultipais}
+                </span>
+                <span className="metrica-etiqueta">Proyectos multi-país</span>
+              </div>
+            )}
+            {datosPU && (
+              <div className="metrica-tarjeta">
+                <span className="metrica-valor" style={{ color: COLOR_PAIS_UNICO }}>
+                  {metricasGlobales.paisesConPaisUnico}
+                </span>
+                <span className="metrica-etiqueta">Países con proyectos país-único</span>
+              </div>
+            )}
+            {datosMP && (
+              <div className="metrica-tarjeta">
+                <span className="metrica-valor" style={{ color: COLOR_MULTIPAIS }}>
+                  {metricasGlobales.paisesConMultipais}
+                </span>
+                <span className="metrica-etiqueta">Países con proyectos multi-país</span>
+              </div>
+            )}
           </div>
 
-          <h3 className="panel-lateral-seccion-titulo">
-            Distribución por rol
-          </h3>
+          <h3 className="panel-lateral-seccion-titulo">Distribución por rol</h3>
           <GraficoDonut
-            datosPaisUnico={datosGraficos.conteoRolPaisUnico}
-            datosMultipais={
-              incluirMultipais ? datosGraficos.conteoRolMultipais : null
-            }
+            datosPaisUnico={datosPU ? datosGraficos.conteoRolPaisUnico : null}
+            datosMultipais={datosMP ? datosGraficos.conteoRolMultipais : null}
           />
 
-          <h3 className="panel-lateral-seccion-titulo">
-            Proyectos por tipo de institución
-          </h3>
+          <h3 className="panel-lateral-seccion-titulo">Proyectos por tipo de institución</h3>
           <GraficoBarras
-            datosPaisUnico={datosGraficos.conteoTipoInstitucionPaisUnico}
-            datosMultipais={
-              incluirMultipais
-                ? datosGraficos.conteoTipoInstitucionMultipais
-                : null
-            }
+            datosPaisUnico={datosPU ? datosGraficos.conteoTipoInstitucionPaisUnico : null}
+            datosMultipais={datosMP ? datosGraficos.conteoTipoInstitucionMultipais : null}
           />
         </>
       )}

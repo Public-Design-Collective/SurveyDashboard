@@ -11,22 +11,23 @@ function GraficoBarras({ datosPaisUnico, datosMultipais }) {
   const svgRef = useRef();
   const tooltipRef = useRef();
 
-  const grouped =
-    datosMultipais != null && Object.keys(datosMultipais).length > 0;
+  const hasPU = datosPaisUnico != null && Object.keys(datosPaisUnico).length > 0;
+  const hasMP = datosMultipais != null && Object.keys(datosMultipais).length > 0;
+  const grouped = hasPU && hasMP;
 
   const allLabels = useMemo(() => {
     const labels = new Set([
-      ...Object.keys(datosPaisUnico),
-      ...(datosMultipais ? Object.keys(datosMultipais) : []),
+      ...(hasPU ? Object.keys(datosPaisUnico) : []),
+      ...(hasMP ? Object.keys(datosMultipais) : []),
     ]);
     return [...labels].sort((a, b) => {
       const totalA =
-        (datosPaisUnico[a] || 0) + (datosMultipais?.[a] || 0);
+        (datosPaisUnico?.[a] || 0) + (datosMultipais?.[a] || 0);
       const totalB =
-        (datosPaisUnico[b] || 0) + (datosMultipais?.[b] || 0);
+        (datosPaisUnico?.[b] || 0) + (datosMultipais?.[b] || 0);
       return totalB - totalA;
     });
-  }, [datosPaisUnico, datosMultipais]);
+  }, [datosPaisUnico, datosMultipais, hasPU, hasMP]);
 
   useEffect(() => {
     const svg = d3.select(svgRef.current);
@@ -50,10 +51,8 @@ function GraficoBarras({ datosPaisUnico, datosMultipais }) {
     svg.attr('width', ANCHO).attr('height', alto);
 
     const maxVal = Math.max(
-      d3.max(allLabels, (l) => datosPaisUnico[l] || 0) || 0,
-      grouped
-        ? d3.max(allLabels, (l) => datosMultipais[l] || 0) || 0
-        : 0,
+      hasPU ? d3.max(allLabels, (l) => datosPaisUnico[l] || 0) || 0 : 0,
+      hasMP ? d3.max(allLabels, (l) => datosMultipais[l] || 0) || 0 : 0,
     );
 
     const x = d3
@@ -92,30 +91,32 @@ function GraficoBarras({ datosPaisUnico, datosMultipais }) {
         .attr('fill', '#475569')
         .text(label);
 
-      const puVal = datosPaisUnico[label] || 0;
-      const puBar = svg
-        .append('rect')
-        .attr('x', MARGEN.left)
-        .attr('y', groupY)
-        .attr('width', Math.max(0, x(puVal) - MARGEN.left))
-        .attr('height', barHeight)
-        .attr('fill', COLOR_PAIS_UNICO)
-        .attr('rx', 3);
-      addTooltipEvents(puBar, label, puVal, 'País-único');
+      if (hasPU) {
+        const puVal = datosPaisUnico[label] || 0;
+        const puBar = svg
+          .append('rect')
+          .attr('x', MARGEN.left)
+          .attr('y', groupY)
+          .attr('width', Math.max(0, x(puVal) - MARGEN.left))
+          .attr('height', barHeight)
+          .attr('fill', COLOR_PAIS_UNICO)
+          .attr('rx', 3);
+        addTooltipEvents(puBar, label, puVal, 'País-único');
 
-      svg
-        .append('text')
-        .attr('x', x(puVal) + 4)
-        .attr('y', groupY + barHeight / 2)
-        .attr('dominant-baseline', 'central')
-        .attr('font-size', '0.7rem')
-        .attr('fill', '#1e293b')
-        .attr('font-weight', '600')
-        .text(puVal);
+        svg
+          .append('text')
+          .attr('x', x(puVal) + 4)
+          .attr('y', groupY + barHeight / 2)
+          .attr('dominant-baseline', 'central')
+          .attr('font-size', '0.7rem')
+          .attr('fill', '#1e293b')
+          .attr('font-weight', '600')
+          .text(puVal);
+      }
 
-      if (grouped) {
+      if (hasMP) {
         const mpVal = datosMultipais[label] || 0;
-        const mpY = groupY + barHeight + barGap;
+        const mpY = grouped ? groupY + barHeight + barGap : groupY;
         const mpBar = svg
           .append('rect')
           .attr('x', MARGEN.left)
@@ -137,7 +138,7 @@ function GraficoBarras({ datosPaisUnico, datosMultipais }) {
           .text(mpVal);
       }
     });
-  }, [allLabels, datosPaisUnico, datosMultipais, grouped]);
+  }, [allLabels, datosPaisUnico, datosMultipais, grouped, hasPU, hasMP]);
 
   if (allLabels.length === 0) return null;
 

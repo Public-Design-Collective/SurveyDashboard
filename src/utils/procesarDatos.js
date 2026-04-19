@@ -122,11 +122,14 @@ export function calcularDatosGraficosDesglosados(filas, nombrePais) {
   };
 }
 
-export function obtenerProyectosPorPais(filas, nombrePais, incluirMultipais) {
-  const filasActivas = filtrarPorClasificacion(filas, incluirMultipais);
-
-  return filasActivas.filter((fila) => {
+export function obtenerProyectosPorPais(filas, nombrePais, incluirPaisUnico, incluirMultipais) {
+  return filas.filter((fila) => {
     const paises = extraerPaises(fila.paisImplementacion);
-    return paises.includes(nombrePais);
+    if (!paises.includes(nombrePais)) return false;
+
+    const esPaisUnico = fila.clasificacion === 'País-único';
+    if (esPaisUnico && !incluirPaisUnico) return false;
+    if (!esPaisUnico && !incluirMultipais) return false;
+    return true;
   });
 }

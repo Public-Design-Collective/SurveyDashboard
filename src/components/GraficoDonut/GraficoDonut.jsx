@@ -61,38 +61,36 @@ function dibujarDonut(svgEl, entries, colorScale, size, tooltipEl, total) {
 }
 
 function GraficoDonut({ datosPaisUnico, datosMultipais }) {
-  const svgPaisUnicoRef = useRef();
-  const svgMultipaisRef = useRef();
+  const svgPrimaryRef = useRef();
+  const svgSecondaryRef = useRef();
   const tooltipRef = useRef();
 
-  const dualMode =
-    datosMultipais != null && Object.keys(datosMultipais).length > 0;
+  const hasPU = datosPaisUnico != null && Object.keys(datosPaisUnico).length > 0;
+  const hasMP = datosMultipais != null && Object.keys(datosMultipais).length > 0;
+  const dualMode = hasPU && hasMP;
 
   const allLabels = useMemo(() => {
     const labels = new Set([
-      ...Object.keys(datosPaisUnico),
-      ...(datosMultipais ? Object.keys(datosMultipais) : []),
+      ...(hasPU ? Object.keys(datosPaisUnico) : []),
+      ...(hasMP ? Object.keys(datosMultipais) : []),
     ]);
     return [...labels].sort((a, b) => {
       const totalA =
-        (datosPaisUnico[a] || 0) + (datosMultipais?.[a] || 0);
+        (datosPaisUnico?.[a] || 0) + (datosMultipais?.[a] || 0);
       const totalB =
-        (datosPaisUnico[b] || 0) + (datosMultipais?.[b] || 0);
+        (datosPaisUnico?.[b] || 0) + (datosMultipais?.[b] || 0);
       return totalB - totalA;
     });
-  }, [datosPaisUnico, datosMultipais]);
+  }, [datosPaisUnico, datosMultipais, hasPU, hasMP]);
 
   const totalPU = useMemo(
-    () => Object.values(datosPaisUnico).reduce((s, v) => s + v, 0),
-    [datosPaisUnico],
+    () => (hasPU ? Object.values(datosPaisUnico).reduce((s, v) => s + v, 0) : 0),
+    [datosPaisUnico, hasPU],
   );
 
   const totalMP = useMemo(
-    () =>
-      datosMultipais
-        ? Object.values(datosMultipais).reduce((s, v) => s + v, 0)
-        : 0,
-    [datosMultipais],
+    () => (hasMP ? Object.values(datosMultipais).reduce((s, v) => s + v, 0) : 0),
+    [datosMultipais, hasMP],
   );
 
   const colorPU = useMemo(
@@ -115,18 +113,26 @@ function GraficoDonut({ datosPaisUnico, datosMultipais }) {
 
   const size = dualMode ? 140 : 180;
 
+  // Draw primary donut (PU if available, otherwise MP)
   useEffect(() => {
-    const entriesPU = allLabels.map((l) => [l, datosPaisUnico[l] || 0]);
-    dibujarDonut(svgPaisUnicoRef.current, entriesPU, colorPU, size, tooltipRef.current, totalPU);
-  }, [allLabels, datosPaisUnico, colorPU, size, totalPU]);
+    if (!hasPU && !hasMP) return;
+    const data = hasPU ? datosPaisUnico : datosMultipais;
+    const colorScale = hasPU ? colorPU : colorMP;
+    const total = hasPU ? totalPU : totalMP;
+    const entries = allLabels.map((l) => [l, data[l] || 0]);
+    dibujarDonut(svgPrimaryRef.current, entries, colorScale, size, tooltipRef.current, total);
+  }, [allLabels, datosPaisUnico, datosMultipais, colorPU, colorMP, size, totalPU, totalMP, hasPU, hasMP]);
 
+  // Draw secondary donut (MP, only in dual mode)
   useEffect(() => {
     if (!dualMode) return;
-    const entriesMP = allLabels.map((l) => [l, datosMultipais[l] || 0]);
-    dibujarDonut(svgMultipaisRef.current, entriesMP, colorMP, size, tooltipRef.current, totalMP);
+    const entries = allLabels.map((l) => [l, datosMultipais[l] || 0]);
+    dibujarDonut(svgSecondaryRef.current, entries, colorMP, size, tooltipRef.current, totalMP);
   }, [dualMode, allLabels, datosMultipais, colorMP, size, totalMP]);
 
   if (allLabels.length === 0) return null;
+
+  const primaryLabel = hasPU ? 'País-único' : 'Multi-país';
 
   return (
     <div className="grafico-donut">
@@ -135,52 +141,66 @@ function GraficoDonut({ datosPaisUnico, datosMultipais }) {
         className={`grafico-donut-graficos ${dualMode ? 'grafico-donut-dual' : ''}`}
       >
         <div className="grafico-donut-columna">
-          {dualMode && (
-            <span className="grafico-donut-subtitulo">País-único</span>
-          )}
-          <svg ref={svgPaisUnicoRef}></svg>
+          {dualMode && <span className="grafico-donut-subtitulo">{primaryLabel}</span>}
+          <svg ref={svgPrimaryRef}></svg>
         </div>
         {dualMode && (
           <div className="grafico-donut-columna">
             <span className="grafico-donut-subtitulo">Multi-país</span>
-            <svg ref={svgMultipaisRef}></svg>
+            <svg ref={svgSecondaryRef}></svg>
           </div>
         )}
       </div>
       <div className="grafico-donut-leyenda">
-        {allLabels.map((label) => (
-          <div key={label} className="grafico-donut-leyenda-item">
-            <span
-              className="grafico-donut-leyenda-color"
-              style={{ backgroundColor: colorPU(label) }}
-            />
-            {dualMode && (
-              <span
-                className="grafico-donut-leyenda-color"
-                style={{ backgroundColor: colorMP(label) }}
-              />
-            )}
-            <span className="grafico-donut-leyenda-texto">{label}</span>
-            <span className="grafico-donut-leyenda-valor">
-              {totalPU > 0
-                ? Math.round(
-                    ((datosPaisUnico[label] || 0) / totalPU) * 100,
-                  )
-                : 0}
-              %
-            </span>
-            {dualMode && (
-              <span className="grafico-donut-leyenda-valor">
-                {totalMP > 0
-                  ? Math.round(
-                      ((datosMultipais[label] || 0) / totalMP) * 100,
-                    )
-                  : 0}
-                %
-              </span>
-            )}
-          </div>
-        ))}
+        {allLabels.map((label) => {
+          const puColor = hasPU ? colorPU(label) : null;
+          const mpColor = hasMP ? colorMP(label) : null;
+
+          return (
+            <div key={label} className="grafico-donut-leyenda-item">
+              {puColor && (
+                <span
+                  className="grafico-donut-leyenda-color"
+                  style={{ backgroundColor: puColor }}
+                />
+              )}
+              {dualMode && mpColor && (
+                <span
+                  className="grafico-donut-leyenda-color"
+                  style={{ backgroundColor: mpColor }}
+                />
+              )}
+              {!hasPU && mpColor && (
+                <span
+                  className="grafico-donut-leyenda-color"
+                  style={{ backgroundColor: mpColor }}
+                />
+              )}
+              <span className="grafico-donut-leyenda-texto">{label}</span>
+              {hasPU && (
+                <span className="grafico-donut-leyenda-valor">
+                  {totalPU > 0
+                    ? Math.round(((datosPaisUnico[label] || 0) / totalPU) * 100)
+                    : 0}%
+                </span>
+              )}
+              {dualMode && (
+                <span className="grafico-donut-leyenda-valor">
+                  {totalMP > 0
+                    ? Math.round(((datosMultipais[label] || 0) / totalMP) * 100)
+                    : 0}%
+                </span>
+              )}
+              {!hasPU && hasMP && (
+                <span className="grafico-donut-leyenda-valor">
+                  {totalMP > 0
+                    ? Math.round(((datosMultipais[label] || 0) / totalMP) * 100)
+                    : 0}%
+                </span>
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );

@@ -58,6 +58,7 @@ function MapaDeBurbujas({
   conteosPaisUnico,
   conteosMultipais,
   conteoMaximoReferencia,
+  incluirPaisUnico,
   incluirMultipais,
   paisSeleccionado,
   onSeleccionarPais,
@@ -77,24 +78,25 @@ function MapaDeBurbujas({
       />
       <ClickFueraDeBurbujas onDeseleccionar={onDeseleccionarPais} />
 
-      {Object.entries(conteosPaisUnico).map(([nombrePais, conteo]) => {
-        const coordenadas = COORDENADAS_PAISES[nombrePais];
-        if (!coordenadas) return null;
+      {incluirPaisUnico &&
+        Object.entries(conteosPaisUnico).map(([nombrePais, conteo]) => {
+          const coordenadas = COORDENADAS_PAISES[nombrePais];
+          if (!coordenadas) return null;
 
-        return (
-          <Burbuja
-            key={`pu-${nombrePais}`}
-            nombrePais={nombrePais}
-            coordenadas={coordenadas}
-            conteo={conteo}
-            radio={calcularRadio(conteo, conteoMaximoReferencia)}
-            color={COLOR_PAIS_UNICO}
-            tipo="País-único"
-            estaSeleccionado={nombrePais === paisSeleccionado}
-            onSeleccionarPais={onSeleccionarPais}
-          />
-        );
-      })}
+          return (
+            <Burbuja
+              key={`pu-${nombrePais}`}
+              nombrePais={nombrePais}
+              coordenadas={coordenadas}
+              conteo={conteo}
+              radio={calcularRadio(conteo, conteoMaximoReferencia)}
+              color={COLOR_PAIS_UNICO}
+              tipo="País-único"
+              estaSeleccionado={nombrePais === paisSeleccionado}
+              onSeleccionarPais={onSeleccionarPais}
+            />
+          );
+        })}
 
       {incluirMultipais &&
         Object.entries(conteosMultipais).map(([nombrePais, conteo]) => {

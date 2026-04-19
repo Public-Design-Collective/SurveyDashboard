@@ -13,6 +13,7 @@ import SelectorMultipais from "./components/SelectorMultipais/SelectorMultipais"
 
 function App() {
   const { datos, cargando, error } = useDatosSurvey();
+  const [incluirPaisUnico, setIncluirPaisUnico] = useState(true);
   const [incluirMultipais, setIncluirMultipais] = useState(true);
   const [paisSeleccionado, setPaisSeleccionado] = useState(null);
 
@@ -33,9 +34,14 @@ function App() {
   const proyectosDelPais = useMemo(
     () =>
       paisSeleccionado
-        ? obtenerProyectosPorPais(datos, paisSeleccionado, incluirMultipais)
+        ? obtenerProyectosPorPais(
+            datos,
+            paisSeleccionado,
+            incluirPaisUnico,
+            incluirMultipais,
+          )
         : [],
-    [datos, paisSeleccionado, incluirMultipais],
+    [datos, paisSeleccionado, incluirPaisUnico, incluirMultipais],
   );
 
   const metricasGlobales = useMemo(
@@ -80,13 +86,16 @@ function App() {
     <div className="contenedor-app">
       <div className="contenedor-mapa-principal">
         <SelectorMultipais
+          incluirPaisUnico={incluirPaisUnico}
           incluirMultipais={incluirMultipais}
-          onCambiar={setIncluirMultipais}
+          onCambiarPaisUnico={setIncluirPaisUnico}
+          onCambiarMultipais={setIncluirMultipais}
         />
         <MapaDeBurbujas
           conteosPaisUnico={conteosDesglosados.paisUnico}
           conteosMultipais={conteosDesglosados.multipais}
           conteoMaximoReferencia={conteoMaximoReferencia}
+          incluirPaisUnico={incluirPaisUnico}
           incluirMultipais={incluirMultipais}
           paisSeleccionado={paisSeleccionado}
           onSeleccionarPais={setPaisSeleccionado}
@@ -99,6 +108,7 @@ function App() {
         metricasGlobales={metricasGlobales}
         metricasPais={metricasPais}
         datosGraficos={datosGraficos}
+        incluirPaisUnico={incluirPaisUnico}
         incluirMultipais={incluirMultipais}
         onVolver={manejarDeseleccionPais}
       />
