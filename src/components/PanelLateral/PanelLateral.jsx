@@ -1,6 +1,5 @@
 import TarjetaProyecto from '../TarjetaProyecto/TarjetaProyecto';
 import GraficoDonut from '../GraficoDonut/GraficoDonut';
-import GraficoBarras from '../GraficoBarras/GraficoBarras';
 import './PanelLateral.css';
 
 const COLOR_PAIS_UNICO = '#ABC174';
@@ -68,7 +67,7 @@ function PanelLateral({
           />
 
           <h3 className="panel-lateral-seccion-titulo">Proyectos por tipo de institución</h3>
-          <GraficoBarras
+          <GraficoDonut
             datosPaisUnico={datosPU ? datosGraficos.conteoTipoInstitucionPaisUnico : null}
             datosMultipais={datosMP ? datosGraficos.conteoTipoInstitucionMultipais : null}
           />
@@ -126,7 +125,7 @@ function PanelLateral({
           />
 
           <h3 className="panel-lateral-seccion-titulo">Proyectos por tipo de institución</h3>
-          <GraficoBarras
+          <GraficoDonut
             datosPaisUnico={datosPU ? datosGraficos.conteoTipoInstitucionPaisUnico : null}
             datosMultipais={datosMP ? datosGraficos.conteoTipoInstitucionMultipais : null}
           />

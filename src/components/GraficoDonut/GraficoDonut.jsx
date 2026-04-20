@@ -18,7 +18,7 @@ function generarTonos(colorBase, n) {
   );
 }
 
-function dibujarDonut(svgEl, entries, colorScale, size, tooltipEl, total) {
+function dibujarDonut(svgEl, entries, colorScale, size) {
   const svg = d3.select(svgEl);
   svg.selectAll('*').remove();
 
@@ -33,7 +33,6 @@ function dibujarDonut(svgEl, entries, colorScale, size, tooltipEl, total) {
 
   const pie = d3.pie().value((d) => d[1]).sort(null);
   const arc = d3.arc().innerRadius(radioInterno).outerRadius(radio);
-  const tooltip = d3.select(tooltipEl);
 
   g.selectAll('path')
     .data(pie(filtered))
@@ -41,23 +40,7 @@ function dibujarDonut(svgEl, entries, colorScale, size, tooltipEl, total) {
     .attr('d', arc)
     .attr('fill', (d) => colorScale(d.data[0]))
     .attr('stroke', '#fff')
-    .attr('stroke-width', 1.5)
-    .on('mouseover', (event, d) => {
-      const label = d.data[0];
-      const count = d.data[1];
-      const pct = total > 0 ? Math.round((count / total) * 100) : 0;
-      tooltip
-        .style('display', 'block')
-        .html(`<strong>${label}</strong><br>${count} (${pct}%)`);
-    })
-    .on('mousemove', (event) => {
-      tooltip
-        .style('left', `${event.clientX + 12}px`)
-        .style('top', `${event.clientY - 12}px`);
-    })
-    .on('mouseout', () => {
-      tooltip.style('display', 'none');
-    });
+    .attr('stroke-width', 1.5);
 }
 
 function GraficoDonut({ datosPaisUnico, datosMultipais }) {
@@ -113,22 +96,90 @@ function GraficoDonut({ datosPaisUnico, datosMultipais }) {
 
   const size = dualMode ? 140 : 180;
 
-  // Draw primary donut (PU if available, otherwise MP)
+  // Single mode: draw one donut with its own tooltip
   useEffect(() => {
-    if (!hasPU && !hasMP) return;
+    if (dualMode || (!hasPU && !hasMP)) return;
+
     const data = hasPU ? datosPaisUnico : datosMultipais;
     const colorScale = hasPU ? colorPU : colorMP;
     const total = hasPU ? totalPU : totalMP;
-    const entries = allLabels.map((l) => [l, data[l] || 0]);
-    dibujarDonut(svgPrimaryRef.current, entries, colorScale, size, tooltipRef.current, total);
-  }, [allLabels, datosPaisUnico, datosMultipais, colorPU, colorMP, size, totalPU, totalMP, hasPU, hasMP]);
 
-  // Draw secondary donut (MP, only in dual mode)
+    dibujarDonut(svgPrimaryRef.current, allLabels.map((l) => [l, data[l] || 0]), colorScale, size);
+
+    const tooltip = d3.select(tooltipRef.current);
+    d3.select(svgPrimaryRef.current)
+      .selectAll('path')
+      .on('mouseover', (event, d) => {
+        const label = d.data[0];
+        const count = d.data[1];
+        const pct = total > 0 ? Math.round((count / total) * 100) : 0;
+        tooltip
+          .style('display', 'block')
+          .html(`<strong>${label}</strong><br>${count} (${pct}%)`);
+      })
+      .on('mousemove', (event) => {
+        tooltip
+          .style('left', `${event.clientX + 12}px`)
+          .style('top', `${event.clientY - 12}px`);
+      })
+      .on('mouseout', () => {
+        tooltip.style('display', 'none');
+      });
+  }, [dualMode, allLabels, datosPaisUnico, datosMultipais, colorPU, colorMP, size, totalPU, totalMP, hasPU, hasMP]);
+
+  // Dual mode: draw both donuts with coordinated tooltips
   useEffect(() => {
     if (!dualMode) return;
-    const entries = allLabels.map((l) => [l, datosMultipais[l] || 0]);
-    dibujarDonut(svgSecondaryRef.current, entries, colorMP, size, tooltipRef.current, totalMP);
-  }, [dualMode, allLabels, datosMultipais, colorMP, size, totalMP]);
+
+    const entriesPU = allLabels.map((l) => [l, datosPaisUnico[l] || 0]);
+    const entriesMP = allLabels.map((l) => [l, datosMultipais[l] || 0]);
+
+    dibujarDonut(svgPrimaryRef.current, entriesPU, colorPU, size);
+    dibujarDonut(svgSecondaryRef.current, entriesMP, colorMP, size);
+
+    const svgPU = d3.select(svgPrimaryRef.current);
+    const svgMP = d3.select(svgSecondaryRef.current);
+    const tooltip = d3.select(tooltipRef.current);
+
+    function onHover(label, event) {
+      svgPU.selectAll('path').attr('opacity', (d) => (d.data[0] === label ? 1 : 0.25));
+      svgMP.selectAll('path').attr('opacity', (d) => (d.data[0] === label ? 1 : 0.25));
+
+      const puCount = datosPaisUnico[label] || 0;
+      const mpCount = datosMultipais[label] || 0;
+      const puPct = totalPU > 0 ? Math.round((puCount / totalPU) * 100) : 0;
+      const mpPct = totalMP > 0 ? Math.round((mpCount / totalMP) * 100) : 0;
+      tooltip
+        .style('display', 'block')
+        .html(
+          `<strong>${label}</strong><br>País-único: ${puCount} (${puPct}%)<br>Multi-país: ${mpCount} (${mpPct}%)`,
+        );
+    }
+
+    function onMove(event) {
+      tooltip
+        .style('left', `${event.clientX + 12}px`)
+        .style('top', `${event.clientY - 12}px`);
+    }
+
+    function onOut() {
+      svgPU.selectAll('path').attr('opacity', 1);
+      svgMP.selectAll('path').attr('opacity', 1);
+      tooltip.style('display', 'none');
+    }
+
+    svgPU
+      .selectAll('path')
+      .on('mouseover', (event, d) => onHover(d.data[0], event))
+      .on('mousemove', onMove)
+      .on('mouseout', onOut);
+
+    svgMP
+      .selectAll('path')
+      .on('mouseover', (event, d) => onHover(d.data[0], event))
+      .on('mousemove', onMove)
+      .on('mouseout', onOut);
+  }, [dualMode, allLabels, datosPaisUnico, datosMultipais, colorPU, colorMP, size, totalPU, totalMP]);
 
   if (allLabels.length === 0) return null;
 
