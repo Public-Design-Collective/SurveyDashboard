@@ -2,108 +2,121 @@
   height: 100vh;
   overflow-y: auto;
   background: #ffffff;
-  border-left: 1px solid #e0e0e0;
-  padding: 1.25rem;
+  border-left: 1px solid #f1f5f9;
+  padding: 2rem 1.75rem;
+  color: #0f172a;
 }
 
 .panel-lateral-encabezado {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .panel-lateral-titulo {
-  font-size: 1.3rem;
-  color: #1e293b;
-  margin-bottom: 0.25rem;
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #0f172a;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
 }
 
 .panel-lateral-conteo {
-  font-size: 0.85rem;
-  color: #64748b;
+  font-size: 0.78rem;
+  color: #94a3b8;
+  margin-top: 0.4rem;
+  letter-spacing: 0.01em;
 }
 
 .panel-lateral-boton-volver {
   background: none;
   border: none;
-  font-size: 0.85rem;
+  font-size: 0.78rem;
   cursor: pointer;
-  color: #2563eb;
+  color: #94a3b8;
   padding: 0;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.85rem;
   transition: color 0.15s;
+  letter-spacing: 0.01em;
 }
 
 .panel-lateral-boton-volver:hover {
-  color: #1d4ed8;
+  color: #475569;
 }
 
 .panel-lateral-tabs {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.25rem;
-  margin-bottom: 1rem;
-  border-bottom: 1px solid #e2e8f0;
+  gap: 1.4rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #f1f5f9;
 }
 
 .panel-lateral-tab {
   background: none;
   border: none;
   border-bottom: 2px solid transparent;
-  padding: 0.4rem 0.6rem;
-  font-size: 0.8rem;
-  color: #64748b;
+  padding: 0.6rem 0;
+  font-size: 0.78rem;
+  color: #94a3b8;
   cursor: pointer;
   transition: color 0.15s, border-color 0.15s;
   margin-bottom: -1px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
 }
 
 .panel-lateral-tab:hover {
-  color: #334155;
+  color: #475569;
 }
 
 .panel-lateral-tab.activa {
-  color: #2563eb;
-  border-bottom-color: #2563eb;
+  color: #0f172a;
+  border-bottom-color: #0f172a;
   font-weight: 600;
 }
 
 .panel-lateral-metricas {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  margin-bottom: 1rem;
+}
+
+.panel-lateral-metricas > * + * {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #f1f5f9;
 }
 
 .grupo-participantes {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 0.5rem;
+  gap: 1rem;
 }
 
 .grupo-clasificadas {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0.6rem;
+  gap: 1.25rem;
 }
 
 .metrica-tarjeta {
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
-  border-radius: 6px;
-  padding: 0.7rem 0.8rem;
+  background: transparent;
+  border: none;
+  padding: 0;
   display: flex;
   flex-direction: column;
   align-items: stretch;
   text-align: left;
-  gap: 0.15rem;
+  gap: 0.2rem;
+  min-width: 0;
 }
 
 .metrica-categoria {
-  font-size: 1rem;
-  font-weight: 700;
-  line-height: 1.1;
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
 }
 
 .metrica-valor-fila {
@@ -111,31 +124,31 @@
   align-items: center;
   justify-content: space-between;
   gap: 0.4rem;
+  margin-top: 0.15rem;
 }
 
 .metrica-valor {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #2563eb;
+  font-size: 2.25rem;
+  font-weight: 600;
   line-height: 1;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
 }
 
 .metrica-descriptor {
   font-size: 0.75rem;
-  color: #64748b;
-  line-height: 1.25;
-}
-
-.metrica-tarjeta.compacta {
-  padding: 0.45rem 0.6rem;
+  color: #94a3b8;
+  line-height: 1.4;
+  font-weight: 400;
+  margin-top: 0.2rem;
 }
 
 .metrica-tarjeta.compacta .metrica-categoria {
-  font-size: 0.85rem;
+  font-size: 0.78rem;
 }
 
 .metrica-tarjeta.compacta .metrica-valor {
-  font-size: 1.4rem;
+  font-size: 1.6rem;
 }
 
 .metrica-tarjeta.compacta .metrica-descriptor {
@@ -143,75 +156,89 @@
 }
 
 .panel-lateral-seccion-titulo {
-  font-size: 0.85rem;
+  font-size: 0.7rem;
   font-weight: 600;
-  color: #334155;
-  margin-top: 1.25rem;
-  margin-bottom: 0.5rem;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-top: 1.5rem;
+  margin-bottom: 1.25rem;
 }
 
 .panel-lateral-tab-contenido > .panel-lateral-seccion-titulo:not(:first-of-type) {
-  border-top: 1px solid #eef1f5;
-  padding-top: 1.25rem;
-  margin-top: 1.5rem;
+  border-top: 1px solid #f1f5f9;
+  padding-top: 1.75rem;
+  margin-top: 2rem;
 }
 
 .panel-lateral-lista {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 1.25rem;
 }
 
 .lista-controles {
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
-  margin-bottom: 1rem;
+  gap: 0.85rem;
+  margin-bottom: 1.5rem;
 }
 
 .lista-busqueda {
-  padding: 0.5rem 0.75rem;
+  padding: 0.65rem 0.9rem;
   border: 1px solid #e2e8f0;
-  border-radius: 6px;
+  border-radius: 8px;
   font-size: 0.85rem;
   width: 100%;
+  background: #ffffff;
+  color: #0f172a;
+  transition: border-color 0.15s;
+}
+
+.lista-busqueda::placeholder {
+  color: #94a3b8;
 }
 
 .lista-busqueda:focus {
   outline: none;
-  border-color: #2563eb;
+  border-color: #0f172a;
 }
 
 .lista-controles-fila {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.7rem;
 }
 
 .lista-control-grupo {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 0.2rem;
+  gap: 0.35rem;
   min-width: 0;
 }
 
 .lista-control-etiqueta {
-  font-size: 0.7rem;
-  color: #64748b;
+  font-size: 0.65rem;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 600;
 }
 
 .lista-control-select {
-  padding: 0.4rem 0.5rem;
+  padding: 0.55rem 0.7rem;
   border: 1px solid #e2e8f0;
-  border-radius: 6px;
+  border-radius: 8px;
   font-size: 0.8rem;
-  background: white;
+  background: #ffffff;
   cursor: pointer;
   width: 100%;
+  color: #0f172a;
+  transition: border-color 0.15s;
 }
 
 .lista-control-select:focus {
   outline: none;
-  border-color: #2563eb;
+  border-color: #0f172a;
 }

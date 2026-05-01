@@ -9,10 +9,14 @@
 html, body, #root {
   height: 100%;
   font-family: 'DM Sans', sans-serif;
+  color: #0f172a;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 button, input, select, textarea {
   font-family: inherit;
+  color: inherit;
 }
 
 .contenedor-app {
@@ -33,6 +37,7 @@ button, input, select, textarea {
   align-items: center;
   justify-content: center;
   height: 100vh;
-  font-size: 1.2rem;
-  color: #555;
+  font-size: 0.95rem;
+  color: #94a3b8;
+  font-weight: 500;
 }

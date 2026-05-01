@@ -1,35 +1,37 @@
 .tarjeta-proyecto {
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
-  border-left: 5px solid #cbd5e1;
-  border-radius: 6px;
-  padding: 0.75rem;
+  background: transparent;
+  border: none;
+  border-left: 4px solid #cbd5e1;
+  border-radius: 0;
+  padding: 0.25rem 0 0.5rem 1rem;
 }
 
 .tarjeta-proyecto-id {
+  font-size: 1rem;
   font-weight: 600;
-  margin-bottom: 0.4rem;
-  font-size: 0.95rem;
+  margin-bottom: 0.45rem;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
 }
 
 .tarjeta-proyecto-detalle {
-  font-size: 0.8rem;
-  color: #475569;
+  font-size: 0.78rem;
+  color: #64748b;
   margin-bottom: 0.2rem;
-  line-height: 1.4;
+  line-height: 1.45;
 }
 
 .tarjeta-proyecto-etiqueta {
-  font-weight: 600;
+  font-weight: 500;
   color: #334155;
 }
 
 .tarjeta-proyecto-pildora {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  margin-top: 0.6rem;
-  padding: 0.3rem 0.7rem;
+  gap: 0.4rem;
+  margin-top: 0.75rem;
+  padding: 0.35rem 0.85rem;
   background: transparent;
   color: #ff6700;
   border: 1px solid #ff6700;
