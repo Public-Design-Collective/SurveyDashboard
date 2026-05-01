@@ -2,20 +2,51 @@ import { useRef, useEffect, useMemo } from 'react';
 import * as d3 from 'd3';
 import './GraficoDonut.css';
 
-const COLOR_PAIS_UNICO = '#ABC174';
-const COLOR_MULTIPAIS = '#C88FF2';
+const ETIQUETA_NO_APLICA = 'No aplica / no sabe/ no responde';
+const COLOR_NO_APLICA = '#e2e8f0';
 
-function generarTonos(colorBase, n) {
-  if (n <= 0) return [];
-  if (n === 1) return [colorBase];
-  return d3.quantize(
-    (t) =>
-      d3.interpolate(
-        d3.color(colorBase).darker(0.6),
-        d3.color(colorBase).brighter(0.4),
-      )(t),
-    n,
-  );
+const PALETA_PAIS_UNICO = ['#d9e5a8', '#b6d17a', '#97b45e', '#789748', '#397a39', '#1d6038'];
+const PALETA_MULTIPAIS = ['#e9dcf4', '#d4c1e5', '#cc91f2', '#bd6bcf', '#a14ead', '#81368d'];
+
+// 'rango' = largest category gets the darkest shade; 'valor' = shade scales with each category's share of the donut
+const MODO_ESCALA = 'rango';
+
+function construirEscalaColorPorRango(labels, paleta) {
+  const tonos = [...paleta].reverse();
+  const range = [];
+  let i = 0;
+  for (const label of labels) {
+    if (label === ETIQUETA_NO_APLICA) {
+      range.push(COLOR_NO_APLICA);
+    } else {
+      range.push(tonos[i % tonos.length]);
+      i++;
+    }
+  }
+  return d3.scaleOrdinal().domain(labels).range(range);
+}
+
+function construirEscalaColorPorValor(labels, conteo, total, paleta) {
+  const proporciones = labels
+    .filter((l) => l !== ETIQUETA_NO_APLICA)
+    .map((l) => (conteo?.[l] ?? 0) / (total || 1));
+  const maxProp = Math.max(0, ...proporciones);
+  const escala =
+    maxProp > 0
+      ? d3.scaleQuantize().domain([0, maxProp]).range(paleta)
+      : () => paleta[0];
+  return (label) => {
+    if (label === ETIQUETA_NO_APLICA) return COLOR_NO_APLICA;
+    const prop = (conteo?.[label] ?? 0) / (total || 1);
+    return escala(prop);
+  };
+}
+
+function construirEscalaColor(labels, conteo, total, paleta) {
+  if (MODO_ESCALA === 'valor') {
+    return construirEscalaColorPorValor(labels, conteo, total, paleta);
+  }
+  return construirEscalaColorPorRango(labels, paleta);
 }
 
 function dibujarDonut(svgEl, entries, colorScale, size) {
@@ -77,21 +108,13 @@ function GraficoDonut({ datosPaisUnico, datosMultipais }) {
   );
 
   const colorPU = useMemo(
-    () =>
-      d3
-        .scaleOrdinal()
-        .domain(allLabels)
-        .range(generarTonos(COLOR_PAIS_UNICO, allLabels.length)),
-    [allLabels],
+    () => construirEscalaColor(allLabels, datosPaisUnico, totalPU, PALETA_PAIS_UNICO),
+    [allLabels, datosPaisUnico, totalPU],
   );
 
   const colorMP = useMemo(
-    () =>
-      d3
-        .scaleOrdinal()
-        .domain(allLabels)
-        .range(generarTonos(COLOR_MULTIPAIS, allLabels.length)),
-    [allLabels],
+    () => construirEscalaColor(allLabels, datosMultipais, totalMP, PALETA_MULTIPAIS),
+    [allLabels, datosMultipais, totalMP],
   );
 
   const size = dualMode ? 140 : 180;

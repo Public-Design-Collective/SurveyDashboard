@@ -11,8 +11,6 @@
   justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 1rem;
-  padding-bottom: 0.75rem;
-  border-bottom: 2px solid #2563eb;
 }
 
 .panel-lateral-titulo {
@@ -41,34 +39,107 @@
   color: #1d4ed8;
 }
 
+.panel-lateral-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.panel-lateral-tab {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 0.4rem 0.6rem;
+  font-size: 0.8rem;
+  color: #64748b;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+  margin-bottom: -1px;
+}
+
+.panel-lateral-tab:hover {
+  color: #334155;
+}
+
+.panel-lateral-tab.activa {
+  color: #2563eb;
+  border-bottom-color: #2563eb;
+  font-weight: 600;
+}
+
 .panel-lateral-metricas {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  flex-direction: column;
   gap: 0.75rem;
   margin-bottom: 1rem;
+}
+
+.grupo-participantes {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+
+.grupo-clasificadas {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
 }
 
 .metrica-tarjeta {
   background: #f8fafc;
   border: 1px solid #e2e8f0;
   border-radius: 6px;
-  padding: 0.75rem;
+  padding: 0.7rem 0.8rem;
   display: flex;
   flex-direction: column;
+  align-items: stretch;
+  text-align: left;
+  gap: 0.15rem;
+}
+
+.metrica-categoria {
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.metrica-valor-fila {
+  display: flex;
   align-items: center;
-  text-align: center;
+  justify-content: space-between;
+  gap: 0.4rem;
 }
 
 .metrica-valor {
-  font-size: 1.5rem;
+  font-size: 2rem;
   font-weight: 700;
   color: #2563eb;
+  line-height: 1;
 }
 
-.metrica-etiqueta {
+.metrica-descriptor {
   font-size: 0.75rem;
   color: #64748b;
-  margin-top: 0.25rem;
+  line-height: 1.25;
+}
+
+.metrica-tarjeta.compacta {
+  padding: 0.45rem 0.6rem;
+}
+
+.metrica-tarjeta.compacta .metrica-categoria {
+  font-size: 0.85rem;
+}
+
+.metrica-tarjeta.compacta .metrica-valor {
+  font-size: 1.4rem;
+}
+
+.metrica-tarjeta.compacta .metrica-descriptor {
+  font-size: 0.7rem;
 }
 
 .panel-lateral-seccion-titulo {
@@ -79,9 +150,68 @@
   margin-bottom: 0.5rem;
 }
 
+.panel-lateral-tab-contenido > .panel-lateral-seccion-titulo:not(:first-of-type) {
+  border-top: 1px solid #eef1f5;
+  padding-top: 1.25rem;
+  margin-top: 1.5rem;
+}
+
 .panel-lateral-lista {
   list-style: none;
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+}
+
+.lista-controles {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.lista-busqueda {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  width: 100%;
+}
+
+.lista-busqueda:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+.lista-controles-fila {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.lista-control-grupo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.lista-control-etiqueta {
+  font-size: 0.7rem;
+  color: #64748b;
+}
+
+.lista-control-select {
+  padding: 0.4rem 0.5rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  background: white;
+  cursor: pointer;
+  width: 100%;
+}
+
+.lista-control-select:focus {
+  outline: none;
+  border-color: #2563eb;
 }

@@ -1,27 +1,46 @@
 import { useState, useEffect } from 'react';
 import Papa from 'papaparse';
-import { URL_CSV } from '../utils/constantes';
+import { URL_CSV, URL_CSV_PARTICIPANTES } from '../utils/constantes';
 
-export function useDatosSurvey() {
-  const [datos, setDatos] = useState([]);
-  const [cargando, setCargando] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    Papa.parse(URL_CSV, {
+function descargarCsv(url) {
+  return new Promise((resolve, reject) => {
+    Papa.parse(url, {
       download: true,
       header: true,
       skipEmptyLines: true,
       complete(resultados) {
-        setDatos(resultados.data);
-        setCargando(false);
+        resolve(resultados.data);
       },
       error(err) {
-        setError(err);
-        setCargando(false);
+        reject(err);
       },
     });
+  });
+}
+
+export function useDatosSurvey() {
+  const [datos, setDatos] = useState([]);
+  const [datosParticipantes, setDatosParticipantes] = useState([]);
+  const [cargando, setCargando] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const tareas = [
+      descargarCsv(URL_CSV),
+      URL_CSV_PARTICIPANTES ? descargarCsv(URL_CSV_PARTICIPANTES) : Promise.resolve([]),
+    ];
+
+    Promise.all(tareas)
+      .then(([proyectos, participantes]) => {
+        setDatos(proyectos);
+        setDatosParticipantes(participantes);
+        setCargando(false);
+      })
+      .catch((err) => {
+        setError(err);
+        setCargando(false);
+      });
   }, []);
 
-  return { datos, cargando, error };
+  return { datos, datosParticipantes, cargando, error };
 }

@@ -6,13 +6,14 @@ import {
   calcularMetricasGlobales,
   calcularMetricasPais,
   calcularDatosGraficosDesglosados,
+  calcularDatosExperiencia,
 } from "./utils/procesarDatos";
 import MapaDeBurbujas from "./components/MapaDeBurbujas/MapaDeBurbujas";
 import PanelLateral from "./components/PanelLateral/PanelLateral";
 import SelectorMultipais from "./components/SelectorMultipais/SelectorMultipais";
 
 function App() {
-  const { datos, cargando, error } = useDatosSurvey();
+  const { datos, datosParticipantes, cargando, error } = useDatosSurvey();
   const [incluirPaisUnico, setIncluirPaisUnico] = useState(true);
   const [incluirMultipais, setIncluirMultipais] = useState(true);
   const [paisSeleccionado, setPaisSeleccionado] = useState(null);
@@ -31,35 +32,58 @@ function App() {
     );
   }, [conteosDesglosados]);
 
-  const proyectosDelPais = useMemo(
-    () =>
-      paisSeleccionado
-        ? obtenerProyectosPorPais(
-            datos,
-            paisSeleccionado,
-            incluirPaisUnico,
-            incluirMultipais,
-          )
-        : [],
-    [datos, paisSeleccionado, incluirPaisUnico, incluirMultipais],
-  );
+  const participantesPorID = useMemo(() => {
+    const m = new Map();
+    for (const p of datosParticipantes) {
+      if (p.participanteID) m.set(p.participanteID, p);
+    }
+    return m;
+  }, [datosParticipantes]);
+
+  const proyectosVisibles = useMemo(() => {
+    let lista;
+    if (paisSeleccionado) {
+      lista = obtenerProyectosPorPais(
+        datos,
+        paisSeleccionado,
+        incluirPaisUnico,
+        incluirMultipais,
+      );
+    } else {
+      lista = datos.filter((fila) => {
+        const esPaisUnico = fila.clasificacion === "País-único";
+        if (esPaisUnico && !incluirPaisUnico) return false;
+        if (!esPaisUnico && !incluirMultipais) return false;
+        return true;
+      });
+    }
+    return lista.map((fila) => ({
+      ...fila,
+      _participante: participantesPorID.get(fila.participanteID),
+    }));
+  }, [datos, paisSeleccionado, incluirPaisUnico, incluirMultipais, participantesPorID]);
 
   const metricasGlobales = useMemo(
-    () => calcularMetricasGlobales(datos),
-    [datos],
+    () => calcularMetricasGlobales(datos, datosParticipantes),
+    [datos, datosParticipantes],
   );
 
   const metricasPais = useMemo(
     () =>
       paisSeleccionado
-        ? calcularMetricasPais(datos, paisSeleccionado)
+        ? calcularMetricasPais(datos, paisSeleccionado, datosParticipantes)
         : null,
-    [datos, paisSeleccionado],
+    [datos, paisSeleccionado, datosParticipantes],
   );
 
   const datosGraficos = useMemo(
     () => calcularDatosGraficosDesglosados(datos, paisSeleccionado),
     [datos, paisSeleccionado],
+  );
+
+  const datosExperiencia = useMemo(
+    () => calcularDatosExperiencia(datos, datosParticipantes, paisSeleccionado),
+    [datos, datosParticipantes, paisSeleccionado],
   );
 
   const manejarDeseleccionPais = () => {
@@ -104,10 +128,11 @@ function App() {
       </div>
       <PanelLateral
         paisSeleccionado={paisSeleccionado}
-        proyectos={proyectosDelPais}
+        proyectos={proyectosVisibles}
         metricasGlobales={metricasGlobales}
         metricasPais={metricasPais}
         datosGraficos={datosGraficos}
+        datosExperiencia={datosExperiencia}
         incluirPaisUnico={incluirPaisUnico}
         incluirMultipais={incluirMultipais}
         onVolver={manejarDeseleccionPais}
