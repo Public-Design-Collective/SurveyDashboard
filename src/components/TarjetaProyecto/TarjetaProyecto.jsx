@@ -1,13 +1,13 @@
 import { useState } from 'react';
-import { COLOR_PAIS_UNICO, COLOR_MULTIPAIS } from '../../utils/constantes';
+import { colorPorClasificacion } from '../../utils/constantes';
 import { IconoConversacion } from '../Iconos/Iconos';
 import { escogerNombre } from '../../utils/nombres';
 import './TarjetaProyecto.css';
 
-function TarjetaProyecto({ proyecto }) {
-  const esPaisUnico = proyecto.clasificacion === 'País-único';
-  const colorClasif = esPaisUnico ? COLOR_PAIS_UNICO : COLOR_MULTIPAIS;
+function TarjetaProyecto({ proyecto, onClick }) {
+  const colorClasif = colorPorClasificacion(proyecto.clasificacion);
   const priorizado = (proyecto.priorizado || '').trim();
+  const esClickeable = Boolean(priorizado && onClick);
 
   const [nombrePersona] = useState(() =>
     priorizado
@@ -18,8 +18,8 @@ function TarjetaProyecto({ proyecto }) {
       : null,
   );
 
-  return (
-    <div className="tarjeta-proyecto" style={{ borderLeftColor: colorClasif }}>
+  const contenido = (
+    <>
       <p className="tarjeta-proyecto-id" style={{ color: colorClasif }}>
         {proyecto.nombre}
       </p>
@@ -32,11 +32,30 @@ function TarjetaProyecto({ proyecto }) {
         {proyecto.paisImplementacion}
       </p>
       {nombrePersona && (
-        <button type="button" className="tarjeta-proyecto-pildora">
+        <span className="tarjeta-proyecto-pildora">
           <IconoConversacion size={14} />
           <span>Conoce la experiencia de {nombrePersona}</span>
-        </button>
+        </span>
       )}
+    </>
+  );
+
+  if (esClickeable) {
+    return (
+      <button
+        type="button"
+        className="tarjeta-proyecto tarjeta-proyecto-clickable"
+        style={{ borderLeftColor: colorClasif }}
+        onClick={onClick}
+      >
+        {contenido}
+      </button>
+    );
+  }
+
+  return (
+    <div className="tarjeta-proyecto" style={{ borderLeftColor: colorClasif }}>
+      {contenido}
     </div>
   );
 }

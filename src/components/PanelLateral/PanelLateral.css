@@ -242,3 +242,68 @@
   outline: none;
   border-color: #0f172a;
 }
+
+.detalle-campos {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.detalle-campo .panel-lateral-seccion-titulo {
+  margin-top: 0;
+  margin-bottom: 0.6rem;
+}
+
+.detalle-pildoras {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.detalle-pildora {
+  display: inline-block;
+  padding: 0.3rem 0.7rem;
+  background: transparent;
+  color: #334155;
+  border: 1px solid #e2e8f0;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  line-height: 1.25;
+}
+
+.detalle-italic {
+  font-style: italic;
+}
+
+.detalle-parrafo {
+  font-size: 0.85rem;
+  color: #334155;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.detalle-pildoras + .detalle-parrafo {
+  margin-top: 0.6rem;
+}
+
+.detalle-parrafo + .detalle-parrafo {
+  margin-top: 0.5rem;
+}
+
+.detalle-texto {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.detalle-enlace {
+  font-size: 0.85rem;
+  color: #2563eb;
+  word-break: break-all;
+  text-decoration: none;
+}
+
+.detalle-enlace:hover {
+  text-decoration: underline;
+}

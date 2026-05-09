@@ -6,6 +6,27 @@
   padding: 0.25rem 0 0.5rem 1rem;
 }
 
+.tarjeta-proyecto-clickable {
+  width: 100%;
+  display: block;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem 0.5rem 1rem;
+  border-radius: 0 6px 6px 0;
+  transition: background 0.15s;
+}
+
+.tarjeta-proyecto-clickable:hover {
+  background: #f8fafc;
+}
+
+.tarjeta-proyecto-clickable:focus-visible {
+  outline: 2px solid #0f172a;
+  outline-offset: 2px;
+}
+
 .tarjeta-proyecto-id {
   font-size: 1rem;
   font-weight: 600;

@@ -6,3 +6,36 @@
 .mapa-leaflet .leaflet-top.leaflet-left .leaflet-control-zoom {
   display: none;
 }
+
+.marcador-detalle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid #ffffff;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.25);
+}
+
+.mapa-chips-fallback {
+  position: absolute;
+  bottom: 1.25rem;
+  left: 1.25rem;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  pointer-events: none;
+}
+
+.mapa-chip-fallback {
+  background: #ffffff;
+  padding: 0.45rem 0.75rem;
+  border-radius: 999px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08), 0 4px 14px rgba(15, 23, 42, 0.06);
+  font-size: 0.75rem;
+  color: #475569;
+  font-weight: 500;
+  white-space: nowrap;
+}

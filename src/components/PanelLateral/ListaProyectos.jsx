@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import TarjetaProyecto from '../TarjetaProyecto/TarjetaProyecto';
 
-function ListaProyectos({ proyectos }) {
+function ListaProyectos({ proyectos, onSeleccionarProyecto }) {
   const [busqueda, setBusqueda] = useState('');
   const [orden, setOrden] = useState('asc');
   const [filtroTipo, setFiltroTipo] = useState('todos');
@@ -72,7 +72,14 @@ function ListaProyectos({ proyectos }) {
       <ul className="panel-lateral-lista">
         {proyectosFiltrados.map((proyecto, i) => (
           <li key={`${proyecto.proyectoID}-${i}`}>
-            <TarjetaProyecto proyecto={proyecto} />
+            <TarjetaProyecto
+              proyecto={proyecto}
+              onClick={
+                onSeleccionarProyecto
+                  ? () => onSeleccionarProyecto(proyecto)
+                  : undefined
+              }
+            />
           </li>
         ))}
       </ul>

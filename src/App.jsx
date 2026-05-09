@@ -17,6 +17,7 @@ function App() {
   const [incluirPaisUnico, setIncluirPaisUnico] = useState(true);
   const [incluirMultipais, setIncluirMultipais] = useState(true);
   const [paisSeleccionado, setPaisSeleccionado] = useState(null);
+  const [proyectoDetalle, setProyectoDetalle] = useState(null);
 
   const conteosDesglosados = useMemo(
     () => contarProyectosPorPaisDesglosado(datos),
@@ -118,6 +119,9 @@ function App() {
         incluirPaisUnico={incluirPaisUnico}
         incluirMultipais={incluirMultipais}
         onVolver={manejarDeseleccionPais}
+        proyectoDetalle={proyectoDetalle}
+        onSeleccionarProyecto={setProyectoDetalle}
+        onCerrarDetalle={() => setProyectoDetalle(null)}
       />
       <div className="contenedor-mapa-principal">
         <SelectorMultipais
@@ -135,6 +139,7 @@ function App() {
           paisSeleccionado={paisSeleccionado}
           onSeleccionarPais={setPaisSeleccionado}
           onDeseleccionarPais={manejarDeseleccionPais}
+          proyectoDetalle={proyectoDetalle}
         />
       </div>
     </div>

@@ -6,6 +6,7 @@ import CardsProyectos from './CardsProyectos';
 import CardsPaises from './CardsPaises';
 import CardsInstituciones from './CardsInstituciones';
 import ListaProyectos from './ListaProyectos';
+import DetalleProyecto from './DetalleProyecto';
 import './PanelLateral.css';
 
 const TABS = [
@@ -25,6 +26,9 @@ function PanelLateral({
   incluirPaisUnico,
   incluirMultipais,
   onVolver,
+  proyectoDetalle,
+  onSeleccionarProyecto,
+  onCerrarDetalle,
 }) {
   const [tabActiva, setTabActiva] = useState('metricas');
   const datosPU = incluirPaisUnico;
@@ -32,6 +36,14 @@ function PanelLateral({
   const ambito = paisSeleccionado ?? 'América Latina';
   const metricas = paisSeleccionado ? metricasPais : metricasGlobales;
   const esVistaGlobal = !paisSeleccionado;
+
+  if (proyectoDetalle) {
+    return (
+      <aside className="panel-lateral">
+        <DetalleProyecto proyecto={proyectoDetalle} onCerrar={onCerrarDetalle} />
+      </aside>
+    );
+  }
 
   const donutRol = (
     <GraficoDonut
@@ -119,7 +131,12 @@ function PanelLateral({
           </>
         )}
 
-        {tabActiva === 'lista' && <ListaProyectos proyectos={proyectos} />}
+        {tabActiva === 'lista' && (
+          <ListaProyectos
+            proyectos={proyectos}
+            onSeleccionarProyecto={onSeleccionarProyecto}
+          />
+        )}
       </div>
     </aside>
   );

@@ -15,6 +15,13 @@ export const RADIO_MINIMO_BURBUJA = 6;
 export const COLOR_PAIS_UNICO = "#ABC174";
 export const COLOR_MULTIPAIS = "#C88FF2";
 export const COLOR_NEUTRAL = "#ff6700";
+export const COLOR_SIN_CLASIFICAR = "#94a3b8";
+
+export function colorPorClasificacion(clasificacion) {
+  if (clasificacion === "País-único") return COLOR_PAIS_UNICO;
+  if (clasificacion === "Multi-país") return COLOR_MULTIPAIS;
+  return COLOR_SIN_CLASIFICAR;
+}
 
 export const PAISES_VALIDOS = new Set([
   "Argentina",
