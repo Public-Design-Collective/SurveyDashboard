@@ -1,4 +1,4 @@
-import { MapContainer, TileLayer, CircleMarker, Tooltip, useMapEvents } from 'react-leaflet';
+import { MapContainer, TileLayer, CircleMarker, Tooltip, ZoomControl, useMapEvents } from 'react-leaflet';
 import { COORDENADAS_PAISES } from '../../utils/coordenadasPaises';
 import {
   CENTRO_MAPA,
@@ -71,11 +71,13 @@ function MapaDeBurbujas({
       minZoom={ZOOM_MINIMO}
       maxZoom={ZOOM_MAXIMO}
       className="mapa-leaflet"
+      zoomControl={false}
     >
       <TileLayer
         attribution='&copy; <a href="https://carto.com/">CARTO</a>'
         url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
       />
+      <ZoomControl position="bottomright" />
       <ClickFueraDeBurbujas onDeseleccionar={onDeseleccionarPais} />
 
       {incluirPaisUnico &&

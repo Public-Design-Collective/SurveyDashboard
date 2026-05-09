@@ -2,7 +2,7 @@
   height: 100vh;
   overflow-y: auto;
   background: #ffffff;
-  border-left: 1px solid #f1f5f9;
+  border-right: 1px solid #f1f5f9;
   padding: 2rem 1.75rem;
   color: #0f172a;
 }
@@ -90,14 +90,24 @@
 
 .grupo-participantes {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem;
 }
 
 .grupo-clasificadas {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 1.25rem;
+}
+
+.grupo-metricas {
+  display: flex;
+  flex-direction: column;
+}
+
+.grupo-metricas > .panel-lateral-seccion-titulo {
+  margin-top: 0;
+  margin-bottom: 1rem;
 }
 
 .metrica-tarjeta {
@@ -108,23 +118,7 @@
   flex-direction: column;
   align-items: stretch;
   text-align: left;
-  gap: 0.2rem;
   min-width: 0;
-}
-
-.metrica-categoria {
-  font-size: 0.9rem;
-  font-weight: 600;
-  line-height: 1.2;
-  letter-spacing: 0.01em;
-}
-
-.metrica-valor-fila {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.4rem;
-  margin-top: 0.15rem;
 }
 
 .metrica-valor {
@@ -136,15 +130,17 @@
 }
 
 .metrica-descriptor {
-  font-size: 0.75rem;
-  color: #94a3b8;
-  line-height: 1.4;
-  font-weight: 400;
-  margin-top: 0.2rem;
+  font-size: 0.78rem;
+  line-height: 1.35;
+  font-weight: 500;
+  margin-top: 0.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.05rem;
 }
 
-.metrica-tarjeta.compacta .metrica-categoria {
-  font-size: 0.78rem;
+.metrica-descriptor-tipo {
+  font-weight: 600;
 }
 
 .metrica-tarjeta.compacta .metrica-valor {
@@ -152,7 +148,8 @@
 }
 
 .metrica-tarjeta.compacta .metrica-descriptor {
-  font-size: 0.7rem;
+  font-size: 0.72rem;
+  margin-top: 0.3rem;
 }
 
 .panel-lateral-seccion-titulo {
@@ -163,6 +160,9 @@
   letter-spacing: 0.1em;
   margin-top: 1.5rem;
   margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
 }
 
 .panel-lateral-tab-contenido > .panel-lateral-seccion-titulo:not(:first-of-type) {

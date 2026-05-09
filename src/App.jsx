@@ -108,6 +108,17 @@ function App() {
 
   return (
     <div className="contenedor-app">
+      <PanelLateral
+        paisSeleccionado={paisSeleccionado}
+        proyectos={proyectosVisibles}
+        metricasGlobales={metricasGlobales}
+        metricasPais={metricasPais}
+        datosGraficos={datosGraficos}
+        datosExperiencia={datosExperiencia}
+        incluirPaisUnico={incluirPaisUnico}
+        incluirMultipais={incluirMultipais}
+        onVolver={manejarDeseleccionPais}
+      />
       <div className="contenedor-mapa-principal">
         <SelectorMultipais
           incluirPaisUnico={incluirPaisUnico}
@@ -126,17 +137,6 @@ function App() {
           onDeseleccionarPais={manejarDeseleccionPais}
         />
       </div>
-      <PanelLateral
-        paisSeleccionado={paisSeleccionado}
-        proyectos={proyectosVisibles}
-        metricasGlobales={metricasGlobales}
-        metricasPais={metricasPais}
-        datosGraficos={datosGraficos}
-        datosExperiencia={datosExperiencia}
-        incluirPaisUnico={incluirPaisUnico}
-        incluirMultipais={incluirMultipais}
-        onVolver={manejarDeseleccionPais}
-      />
     </div>
   );
 }

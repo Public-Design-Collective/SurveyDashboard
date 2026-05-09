@@ -21,7 +21,7 @@ button, input, select, textarea {
 
 .contenedor-app {
   display: grid;
-  grid-template-columns: 1fr 500px;
+  grid-template-columns: 560px 1fr;
   height: 100vh;
 }
 
