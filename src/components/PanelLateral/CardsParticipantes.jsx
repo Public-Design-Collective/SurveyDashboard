@@ -13,25 +13,13 @@ function CardsParticipantes({ metricas, ambito, compacta = false }) {
           tipo="Participantes que"
           detalle={
             <>
-              <strong>reportaron proyectos</strong>
-              <br />
-              en {ambito}
-            </>
-          }
-          valor={metricas.participantesQueReportaronProyectos}
-          color={COLOR_NEUTRAL}
-        />
-        <TarjetaMetrica
-          compacta={compacta}
-          tipo="Participantes que"
-          detalle={
-            <>
               <strong>nacieron</strong>
               <br />
               en {ambito}
             </>
           }
           valor={metricas.participantesQueNacieron}
+          total={metricas.totalParticipantes}
           color={COLOR_NEUTRAL}
         />
         <TarjetaMetrica
@@ -45,6 +33,7 @@ function CardsParticipantes({ metricas, ambito, compacta = false }) {
             </>
           }
           valor={metricas.participantesQueResiden}
+          total={metricas.totalParticipantes}
           color={COLOR_NEUTRAL}
         />
       </div>

@@ -1,5 +1,10 @@
-import { MapContainer, TileLayer, ZoomControl, useMapEvents } from 'react-leaflet';
-import { COORDENADAS_PAISES } from '../../utils/coordenadasPaises';
+import {
+  MapContainer,
+  TileLayer,
+  ZoomControl,
+  useMapEvents,
+} from "react-leaflet";
+import { COORDENADAS_PAISES } from "../../utils/coordenadasPaises";
 import {
   CENTRO_MAPA,
   ZOOM_INICIAL,
@@ -7,10 +12,10 @@ import {
   ZOOM_MAXIMO,
   COLOR_PAIS_UNICO,
   COLOR_MULTIPAIS,
-} from '../../utils/constantes';
-import Burbuja from './Burbuja';
-import MarcadoresDetalle from './MarcadoresDetalle';
-import './MapaDeBurbujas.css';
+} from "../../utils/constantes";
+import Burbuja from "./Burbuja";
+import MarcadoresDetalle from "./MarcadoresDetalle";
+import "./MapaDeBurbujas.css";
 
 const OFFSET_MULTIPAIS = [0, 1.2];
 
@@ -25,9 +30,9 @@ function calcularBanderasFallback(proyectoDetalle) {
   if (!proyectoDetalle) {
     return { participanteDesconocido: false, implementacionDesconocido: false };
   }
-  const paisIndividuo = (proyectoDetalle.paisIndividuo || '').trim();
-  const paisesImpl = (proyectoDetalle.paisImplementacion || '')
-    .split(',')
+  const paisIndividuo = (proyectoDetalle.paisIndividuo || "").trim();
+  const paisesImpl = (proyectoDetalle.paisImplementacion || "")
+    .split(",")
     .map((p) => p.trim())
     .filter((p) => COORDENADAS_PAISES[p]);
   return {
@@ -62,8 +67,8 @@ function MapaDeBurbujas({
         zoomControl={false}
       >
         <TileLayer
-          attribution='&copy; <a href="https://carto.com/">CARTO</a>'
-          url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/">CARTO</a>'
+          url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png"
         />
         <ZoomControl position="bottomright" />
 
@@ -117,20 +122,21 @@ function MapaDeBurbujas({
           </>
         )}
       </MapContainer>
-      {enModoDetalle && (participanteDesconocido || implementacionDesconocido) && (
-        <div className="mapa-chips-fallback">
-          {participanteDesconocido && (
-            <div className="mapa-chip-fallback">
-              País de participante desconocido
-            </div>
-          )}
-          {implementacionDesconocido && (
-            <div className="mapa-chip-fallback">
-              País de implementación desconocido
-            </div>
-          )}
-        </div>
-      )}
+      {enModoDetalle &&
+        (participanteDesconocido || implementacionDesconocido) && (
+          <div className="mapa-chips-fallback">
+            {participanteDesconocido && (
+              <div className="mapa-chip-fallback">
+                País de participante desconocido
+              </div>
+            )}
+            {implementacionDesconocido && (
+              <div className="mapa-chip-fallback">
+                País de implementación desconocido
+              </div>
+            )}
+          </div>
+        )}
     </>
   );
 }

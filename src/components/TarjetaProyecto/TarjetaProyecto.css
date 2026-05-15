@@ -23,7 +23,7 @@
 }
 
 .tarjeta-proyecto-clickable:focus-visible {
-  outline: 2px solid #0f172a;
+  outline: 2px solid #301f36;
   outline-offset: 2px;
 }
 

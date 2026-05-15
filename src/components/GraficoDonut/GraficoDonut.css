@@ -1,7 +1,7 @@
 .grafico-tooltip {
   position: fixed;
   display: none;
-  background: #0f172a;
+  background: #301f36;
   color: #ffffff;
   padding: 0.45rem 0.65rem;
   border-radius: 6px;
@@ -70,7 +70,7 @@
 }
 
 .grafico-donut-leyenda-valor {
-  color: #0f172a;
+  color: #301f36;
   font-weight: 600;
   min-width: 2rem;
   text-align: right;

@@ -14,6 +14,33 @@
 .grafico-barras {
   width: 100%;
   overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+  transition: scrollbar-color 0.25s ease;
+}
+
+.grafico-barras:hover,
+.grafico-barras:focus-within {
+  scrollbar-color: rgba(15, 23, 42, 0.25) transparent;
+}
+
+.grafico-barras::-webkit-scrollbar {
+  height: 8px;
+}
+
+.grafico-barras::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.grafico-barras::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 999px;
+  transition: background 0.25s ease;
+}
+
+.grafico-barras:hover::-webkit-scrollbar-thumb,
+.grafico-barras:focus-within::-webkit-scrollbar-thumb {
+  background: rgba(15, 23, 42, 0.25);
 }
 
 .grafico-barras svg {

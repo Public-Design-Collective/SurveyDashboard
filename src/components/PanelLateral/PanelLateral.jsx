@@ -3,7 +3,6 @@ import GraficoDonut from '../GraficoDonut/GraficoDonut';
 import GraficoBarras from '../GraficoBarras/GraficoBarras';
 import CardsParticipantes from './CardsParticipantes';
 import CardsProyectos from './CardsProyectos';
-import CardsPaises from './CardsPaises';
 import CardsInstituciones from './CardsInstituciones';
 import ListaProyectos from './ListaProyectos';
 import DetalleProyecto from './DetalleProyecto';
@@ -35,7 +34,6 @@ function PanelLateral({
   const datosMP = incluirMultipais;
   const ambito = paisSeleccionado ?? 'América Latina';
   const metricas = paisSeleccionado ? metricasPais : metricasGlobales;
-  const esVistaGlobal = !paisSeleccionado;
 
   if (proyectoDetalle) {
     return (
@@ -93,9 +91,6 @@ function PanelLateral({
             <CardsParticipantes metricas={metricas} ambito={ambito} />
             <CardsProyectos metricas={metricas} datosPU={datosPU} datosMP={datosMP} />
             <CardsInstituciones metricas={metricas} datosPU={datosPU} datosMP={datosMP} />
-            {esVistaGlobal && (
-              <CardsPaises metricas={metricas} datosPU={datosPU} datosMP={datosMP} />
-            )}
           </div>
         )}
 

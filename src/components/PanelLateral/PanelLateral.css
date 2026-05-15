@@ -1,10 +1,37 @@
 .panel-lateral {
   height: 100vh;
   overflow-y: auto;
-  background: #ffffff;
-  border-right: 1px solid #f1f5f9;
+  background: #FFFEFC;
+  border-right: 1px solid #FFFDFA;
   padding: 2rem 1.75rem;
-  color: #0f172a;
+  color: #301f36;
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+  transition: scrollbar-color 0.25s ease;
+}
+
+.panel-lateral:hover,
+.panel-lateral:focus-within {
+  scrollbar-color: rgba(15, 23, 42, 0.25) transparent;
+}
+
+.panel-lateral::-webkit-scrollbar {
+  width: 8px;
+}
+
+.panel-lateral::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.panel-lateral::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 999px;
+  transition: background 0.25s ease;
+}
+
+.panel-lateral:hover::-webkit-scrollbar-thumb,
+.panel-lateral:focus-within::-webkit-scrollbar-thumb {
+  background: rgba(15, 23, 42, 0.25);
 }
 
 .panel-lateral-encabezado {
@@ -17,7 +44,7 @@
 .panel-lateral-titulo {
   font-size: 1.75rem;
   font-weight: 600;
-  color: #0f172a;
+  color: #301f36;
   letter-spacing: -0.02em;
   line-height: 1.1;
 }
@@ -72,8 +99,8 @@
 }
 
 .panel-lateral-tab.activa {
-  color: #0f172a;
-  border-bottom-color: #0f172a;
+  color: #301f36;
+  border-bottom-color: #301f36;
   font-weight: 600;
 }
 
@@ -88,12 +115,7 @@
   border-top: 1px solid #f1f5f9;
 }
 
-.grupo-participantes {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1rem;
-}
-
+.grupo-participantes,
 .grupo-clasificadas {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -127,6 +149,13 @@
   line-height: 1;
   letter-spacing: -0.03em;
   font-variant-numeric: tabular-nums;
+}
+
+.metrica-valor-total {
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  opacity: 0.85;
 }
 
 .metrica-descriptor {
@@ -192,7 +221,7 @@
   font-size: 0.85rem;
   width: 100%;
   background: #ffffff;
-  color: #0f172a;
+  color: #301f36;
   transition: border-color 0.15s;
 }
 
@@ -202,7 +231,7 @@
 
 .lista-busqueda:focus {
   outline: none;
-  border-color: #0f172a;
+  border-color: #301f36;
 }
 
 .lista-controles-fila {
@@ -234,13 +263,13 @@
   background: #ffffff;
   cursor: pointer;
   width: 100%;
-  color: #0f172a;
+  color: #301f36;
   transition: border-color 0.15s;
 }
 
 .lista-control-select:focus {
   outline: none;
-  border-color: #0f172a;
+  border-color: #301f36;
 }
 
 .detalle-campos {
@@ -294,7 +323,7 @@
 .detalle-texto {
   font-size: 1rem;
   font-weight: 600;
-  color: #0f172a;
+  color: #301f36;
 }
 
 .detalle-enlace {

@@ -18,6 +18,7 @@ function CardsProyectos({ metricas, datosPU, datosMP, compacta = false }) {
               </>
             }
             valor={metricas.proyectosPaisUnico}
+            total={metricas.totalProyectos}
             color={COLOR_PAIS_UNICO}
           />
         )}
@@ -31,6 +32,7 @@ function CardsProyectos({ metricas, datosPU, datosMP, compacta = false }) {
               </>
             }
             valor={metricas.proyectosMultipais}
+            total={metricas.totalProyectos}
             color={COLOR_MULTIPAIS}
           />
         )}

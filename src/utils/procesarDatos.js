@@ -41,7 +41,7 @@ export function calcularMetricasGlobales(filas, filasParticipantes = []) {
   const paisesMultipais = new Set();
   const institucionesPaisUnico = new Set();
   const institucionesMultipais = new Set();
-  const participantesQueReportaronProyectos = new Set();
+  const totalInstitucionesSet = new Set();
 
   for (const fila of filas) {
     const paises = extraerPaises(fila.paisImplementacion);
@@ -55,13 +55,15 @@ export function calcularMetricasGlobales(filas, filasParticipantes = []) {
       for (const pais of paises) paisesMultipais.add(pais);
       for (const inst of instituciones) institucionesMultipais.add(inst);
     }
-    if (fila.participanteID) participantesQueReportaronProyectos.add(fila.participanteID);
+    for (const inst of instituciones) totalInstitucionesSet.add(inst);
   }
 
   const participantesQueNacieron = new Set();
   const participantesQueResiden = new Set();
+  const totalParticipantes = new Set();
   for (const fila of filasParticipantes) {
     if (!fila.participanteID) continue;
+    totalParticipantes.add(fila.participanteID);
     const nacimiento = (fila.paisNacimiento || '').trim();
     const residencia = (fila.paisResidencia || '').trim();
     if (PAISES_VALIDOS.has(nacimiento)) participantesQueNacieron.add(fila.participanteID);
@@ -71,13 +73,15 @@ export function calcularMetricasGlobales(filas, filasParticipantes = []) {
   return {
     proyectosPaisUnico,
     proyectosMultipais,
+    totalProyectos: proyectosPaisUnico + proyectosMultipais,
     paisesConPaisUnico: paisesPaisUnico.size,
     paisesConMultipais: paisesMultipais.size,
     institucionesPaisUnico: institucionesPaisUnico.size,
     institucionesMultipais: institucionesMultipais.size,
-    participantesQueReportaronProyectos: participantesQueReportaronProyectos.size,
+    totalInstituciones: totalInstitucionesSet.size,
     participantesQueNacieron: participantesQueNacieron.size,
     participantesQueResiden: participantesQueResiden.size,
+    totalParticipantes: totalParticipantes.size,
   };
 }
 
@@ -86,7 +90,8 @@ export function calcularMetricasPais(filas, nombrePais, filasParticipantes = [])
   let proyectosMultipais = 0;
   const institucionesPaisUnico = new Set();
   const institucionesMultipais = new Set();
-  const participantesQueReportaronProyectos = new Set();
+  const totalInstitucionesSet = new Set();
+  const participantesRelacionados = new Set();
 
   for (const fila of filas) {
     const paises = extraerPaises(fila.paisImplementacion);
@@ -100,7 +105,8 @@ export function calcularMetricasPais(filas, nombrePais, filasParticipantes = [])
       proyectosMultipais++;
       for (const inst of instituciones) institucionesMultipais.add(inst);
     }
-    if (fila.participanteID) participantesQueReportaronProyectos.add(fila.participanteID);
+    for (const inst of instituciones) totalInstitucionesSet.add(inst);
+    if (fila.participanteID) participantesRelacionados.add(fila.participanteID);
   }
 
   const participantesQueNacieron = new Set();
@@ -109,18 +115,26 @@ export function calcularMetricasPais(filas, nombrePais, filasParticipantes = [])
     if (!fila.participanteID) continue;
     const nacimiento = (fila.paisNacimiento || '').trim();
     const residencia = (fila.paisResidencia || '').trim();
-    if (nacimiento === nombrePais) participantesQueNacieron.add(fila.participanteID);
-    if (residencia === nombrePais) participantesQueResiden.add(fila.participanteID);
+    if (nacimiento === nombrePais) {
+      participantesQueNacieron.add(fila.participanteID);
+      participantesRelacionados.add(fila.participanteID);
+    }
+    if (residencia === nombrePais) {
+      participantesQueResiden.add(fila.participanteID);
+      participantesRelacionados.add(fila.participanteID);
+    }
   }
 
   return {
     proyectosPaisUnico,
     proyectosMultipais,
+    totalProyectos: proyectosPaisUnico + proyectosMultipais,
     institucionesPaisUnico: institucionesPaisUnico.size,
     institucionesMultipais: institucionesMultipais.size,
-    participantesQueReportaronProyectos: participantesQueReportaronProyectos.size,
+    totalInstituciones: totalInstitucionesSet.size,
     participantesQueNacieron: participantesQueNacieron.size,
     participantesQueResiden: participantesQueResiden.size,
+    totalParticipantes: participantesRelacionados.size,
   };
 }
 

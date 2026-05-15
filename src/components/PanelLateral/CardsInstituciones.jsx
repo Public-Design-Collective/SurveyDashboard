@@ -18,6 +18,7 @@ function CardsInstituciones({ metricas, datosPU, datosMP, compacta = false }) {
               </>
             }
             valor={metricas.institucionesPaisUnico}
+            total={metricas.totalInstituciones}
             color={COLOR_PAIS_UNICO}
           />
         )}
@@ -31,6 +32,7 @@ function CardsInstituciones({ metricas, datosPU, datosMP, compacta = false }) {
               </>
             }
             valor={metricas.institucionesMultipais}
+            total={metricas.totalInstituciones}
             color={COLOR_MULTIPAIS}
           />
         )}
